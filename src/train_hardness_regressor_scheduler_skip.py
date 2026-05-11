@@ -1,5 +1,19 @@
 import os
-os.environ['HF_HOME'] = '/Users/rahulbouri/Desktop/ml_hea/matscibert_weights/pretrained'
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from configs.config import (
+    DATASET_REGRESSION_CSV,
+    CHECKPOINTS_DIR,
+    FINETUNED_MATSCIBERT_WEIGHTS,
+    DEVICE,
+    RANDOM_SEED
+)
+
+os.environ['HF_HOME'] = str(CHECKPOINTS_DIR / 'huggingface_cache')
 
 import re
 import pandas as pd
@@ -13,28 +27,36 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import traceback
+import joblib
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device(DEVICE if torch.cuda.is_available() else 'cpu')
 
 # ==========================================
-# Configuration - Set your root directory here
+# Configuration - Set your checkpoint directory
 # ==========================================
-ROOT_SAVE_DIR = '/Users/rahulbouri/Desktop/ml_hea/finetuned_matscibert_weights/language_regressor_with_skip_connections/'
-os.makedirs(ROOT_SAVE_DIR, exist_ok=True)
+ROOT_SAVE_DIR = CHECKPOINTS_DIR / 'language_regressor_with_skip_connections'
+ROOT_SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Test write permissions
 try:
-    test_file = os.path.join(ROOT_SAVE_DIR, 'test_write.txt')
+    test_file = ROOT_SAVE_DIR / 'test_write.txt'
     with open(test_file, 'w') as f:
         f.write('test')
-    os.remove(test_file)
+    test_file.unlink()
     print(f"✓ Write permissions confirmed for {ROOT_SAVE_DIR}")
 except Exception as e:
     print(f"✗ Write permission error for {ROOT_SAVE_DIR}: {e}")
     exit(1)
 
-model_path = "/Users/rahulbouri/Downloads/mlm_matsci_bert/model_finetuned"
-tokenizer_path = "/Users/rahulbouri/Downloads/mlm_matsci_bert/tokenizer_finetuned"
+# Use fine-tuned MatSci BERT (if available), otherwise use Hugging Face version
+if FINETUNED_MATSCIBERT_WEIGHTS.exists():
+    model_path = str(FINETUNED_MATSCIBERT_WEIGHTS)
+    tokenizer_path = str(FINETUNED_MATSCIBERT_WEIGHTS)
+    print(f"Using fine-tuned MatSci BERT from: {model_path}")
+else:
+    model_path = "m3rg-iitd/matscibert"
+    tokenizer_path = "m3rg-iitd/matscibert"
+    print("Fine-tuned MatSci BERT not found. Using pre-trained version from Hugging Face Hub.")
 
 # ==========================================
 # 1. Data Loading & Preprocessing

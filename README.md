@@ -499,12 +499,34 @@ Located in `models/saved_models/`:
 
 ### 1. Train All Models
 
+#### Classical Models (LightGBM, Gradient Boosting, Lasso)
 ```bash
 cd src
-python train_for_hardness.py              # Classical models
-python train_hardness_regressor_scheduler.py  # Transformer frozen
-python train_hardness_regressor_scheduler_skip.py  # Language model (best)
+python train_for_hardness.py
 ```
+**Output weights saved to:**
+- `models/checkpoints/lgbm_model.pkl` - Best classical model (LightGBM, R² = 0.773)
+- `models/checkpoints/scaler.pkl` - StandardScaler for feature normalization
+- Console: Train/test metrics for all 3 models
+
+#### Transformer with Frozen Encoder
+```bash
+python train_hardness_regressor_scheduler.py
+```
+**Output weights saved to:**
+- `models/checkpoints/transformer_frozen_encoder.pt` - Transformer regression head
+- `models/checkpoints/scaler.pkl` - Feature scaler
+- Console: R² = 0.742, MAE = 87.6 HV
+
+#### Language Model with Skip Connections (BEST)
+```bash
+python train_hardness_regressor_scheduler_skip.py
+```
+**Output weights saved to:**
+- `models/checkpoints/language_regressor_with_skip_connections/regressor_head.pt` - Best model weights (R² = 0.762)
+- `models/checkpoints/language_regressor_with_skip_connections/scaler.pkl` - Feature scaler
+- `models/checkpoints/language_regressor_with_skip_connections/training_log.txt` - Training metrics
+- Console: R² = 0.762, MAE = 83.4 HV (best performance)
 
 ### 2. Evaluate Feature Importance
 
@@ -512,13 +534,18 @@ python train_hardness_regressor_scheduler_skip.py  # Language model (best)
 python model_shap_explainer.py            # SHAP analysis
 python analysis_self_attention.py         # Attention visualization
 ```
+**Output files saved to:**
+- `models/checkpoints/shap_values.pkl` - SHAP feature importance scores
+- `models/checkpoints/feature_importance.csv` - Ranked features
 
 ### 3. Screen Virtual Candidates
 
 ```bash
-python bo_language_model.py               # Bayesian Optimization
-# Output: Top candidates for experimental validation
+python bo_language_model.py
 ```
+**Output candidates:**
+- Console: Top 5-10 predicted high-hardness alloy compositions
+- Console: Expected Improvement (EI) scores for each candidate
 
 ## Configuration
 

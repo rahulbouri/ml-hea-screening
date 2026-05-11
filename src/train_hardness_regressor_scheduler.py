@@ -1,5 +1,19 @@
 import os
-os.environ['HF_HOME'] = '/Users/rahulbouri/Desktop/ml_hea/matscibert_weights/pretrained'
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from configs.config import (
+    DATASET_REGRESSION_CSV,
+    CHECKPOINTS_DIR,
+    MATSCIBERT_HF_ID,
+    DEVICE,
+    RANDOM_SEED
+)
+
+os.environ['HF_HOME'] = str(CHECKPOINTS_DIR / 'huggingface_cache')
 
 import re
 import pandas as pd
@@ -12,15 +26,13 @@ from collections import defaultdict
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import joblib
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device(DEVICE if torch.cuda.is_available() else 'cpu')
 
-# model_path = "/Users/rahulbouri/Downloads/mlm_matsci_bert/model_finetuned"
-# tokenizer_path = "/Users/rahulbouri/Downloads/mlm_matsci_bert/tokenizer_finetuned"
-
-# Use the original MatSci BERT model instead of custom finetuned model
-model_path = "m3rg-iitd/matscibert"  # Original MatSci BERT model
-tokenizer_path = "m3rg-iitd/matscibert"  # Original MatSci BERT tokenizer
+# Use the original MatSci BERT model from Hugging Face Hub
+model_path = MATSCIBERT_HF_ID
+tokenizer_path = MATSCIBERT_HF_ID
 
 # ==========================================
 # 1. Data Loading & Preprocessing
