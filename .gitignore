@@ -1,0 +1,51 @@
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Data & Models (large files)
+models/saved_models/
+models/checkpoints/
+models/matscibert_weights/
+models/finetuned_matscibert_weights/
+data/*.csv
+
+# Outputs
+logs/
+outputs/
+results/
+*.pkl
+*.pt
+*.pth
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.temp
+.cache/
