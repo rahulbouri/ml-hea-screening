@@ -190,8 +190,9 @@ for epoch in range(1, epochs + 1):
     # Save best head weights
     if val_loss < best_val_loss:
         best_val_loss = val_loss
-        os.makedirs('/Users/rahulbouri/Desktop/ml_hea/finetuned_matscibert_weights/trained_hardness_regressor_model/best_model_200_full_run', exist_ok=True)
-        torch.save(model.state_dict(), '/Users/rahulbouri/Desktop/ml_hea/finetuned_matscibert_weights/trained_hardness_regressor_model/best_model_200_full_run/regressor_head.pt')
+        save_dir = CHECKPOINTS_DIR / 'trained_hardness_regressor_model' / 'best_model_200_full_run'
+        save_dir.mkdir(parents=True, exist_ok=True)
+        torch.save(model.state_dict(), save_dir / 'regressor_head.pt')
         print(f"--> New best model saved (MSE={val_loss:.4f})")
 
 # ==========================================
@@ -208,5 +209,7 @@ print("MAE:", mean_absolute_error(labels_val, preds_val))
 print("R2 :", r2_score(labels_val, preds_val))
 
 # Save final tokenizer
-tokenizer.save_pretrained('/Users/rahulbouri/Desktop/ml_hea/finetuned_matscibert_weights/trained_hardness_regressor_model_200_full_run')
+tokenizer_dir = CHECKPOINTS_DIR / 'trained_hardness_regressor_model_200_full_run'
+tokenizer_dir.mkdir(parents=True, exist_ok=True)
+tokenizer.save_pretrained(str(tokenizer_dir))
 
