@@ -433,9 +433,7 @@ jupyter lab notebooks/
 
 ### Further Reading
 
-For detailed explanations of all notebook sections, see:
-- **NOTEBOOK_GUIDE.md** - Complete section-by-section walkthrough
-- **MARKDOWN_ENHANCEMENT_SUMMARY.txt** - What was added and why
+Each notebook includes comprehensive markdown cells explaining every step. See the notebooks directly for detailed explanations.
 
 ## Data Files Description
 
