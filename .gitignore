@@ -17,6 +17,7 @@ build/
 # Jupyter Notebook
 .ipynb_checkpoints/
 *.ipynb
+!notebooks/*.ipynb
 
 # IDEs
 .vscode/
@@ -31,7 +32,7 @@ models/saved_models/
 models/checkpoints/
 models/matscibert_weights/
 models/finetuned_matscibert_weights/
-data/*.csv
+# data/*.csv  # committed — datasets are small enough for git
 
 # Outputs
 logs/

@@ -22,6 +22,12 @@ tqdm>=4.50.0
 # Bayesian Optimization
 bayesian-optimization>=1.4.0
 
+# Feature engineering
+cbfv>=1.0.0
+
+# Gradient boosting
+lightgbm>=3.0.0
+
 # Feature importance
 shap>=0.41.0
 
