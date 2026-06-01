@@ -4,10 +4,11 @@
 # In[8]:
 
 
-from cbfv.composition import _fractional_composition
-import pandas as pd       
+from CBFV.composition import _fractional_composition
+import pandas as pd
+import os as _os
 ####### saving the element and their corresponding atomic weight in a dictionary ############
-ele_weight = pd.read_csv('/Users/rahulbouri/Desktop/ml_hea/Nballoy_BO/data/element_atweight.csv')
+ele_weight = pd.read_csv(_os.path.join(_os.path.dirname(__file__), '..', 'data', 'element_atweight.csv'))
 ele_wt_dict = dict(ele_weight.values)
 
 
